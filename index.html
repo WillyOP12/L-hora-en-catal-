@@ -238,9 +238,8 @@
  <script>
   // ---- contracció automàtica "de" → "d'" si comença per vocal ----
   function contraccioDe(horaNom) {
-    const vocals = ["a","e","i","o","u"];
-    return vocals.includes(horaNom[0].toLowerCase()) ? `d'${horaNom}` : `de ${horaNom}`;
-  }
+      return horaNom.toLowerCase() === "una" ? "d'una" : `de ${horaNom}`;
+    }
 
   // ---- funció que converteix hores a català ----
   function horaCatala(h, m) {
