@@ -235,127 +235,125 @@
     Contingut transcrit a partir del PDF original. Fet per a GitHub Pages.
   </footer>
 
-  <script>
-    // ---- funció que converteix hores a català (més completa) ----
-    function horaCatala(h, m) {
-      // validar
-      if (h < 0 || h > 23 || m < 0 || m > 59) return "Hora invàlida";
+ <script>
+  // ---- contracció automàtica "de" → "d'" si comença per vocal ----
+  function contraccioDe(horaNom) {
+    const vocals = ["a","e","i","o","u"];
+    return vocals.includes(horaNom[0].toLowerCase()) ? `d'${horaNom}` : `de ${horaNom}`;
+  }
 
-      const properaHora = (h + 1) % 24;
-      const hores = [
-        "dotze", "una", "dues", "tres", "quatre", "cinc",
-        "sis", "set", "vuit", "nou", "deu", "onze"
-      ];
-      function nomHora(x) {
-        return hores[x % 12];
-      }
+  // ---- funció que converteix hores a català ----
+  function horaCatala(h, m) {
+    if (h < 0 || h > 23 || m < 0 || m > 59) return "Hora invàlida";
 
-      // casos exactes
-      if (m === 0) return `Les ${nomHora(h)} en punt`;
-      if (m === 15) return `Un quart de ${nomHora(properaHora)}`;
-      if (m === 30) return `Dos quarts de ${nomHora(properaHora)}`;
-      if (m === 45) return `Tres quarts de ${nomHora(properaHora)}`;
-
-      // entre les hores i el primer quart
-      if (m > 0 && m < 15) {
-        if (m <= 4) return `Les ${nomHora(h)} tocades`;
-        if (m <= 6) return `Les ${nomHora(h)} ben tocades`;
-        if (m <= 8) return `Mig quart de ${nomHora(properaHora)}`;
-        if (m <= 11) return `Mig quart passat de ${nomHora(properaHora)}`;
-        return `Mig quart ben passat de ${nomHora(properaHora)}`;
-      }
-
-      // entre quart i dos quarts
-      if (m > 15 && m < 30) {
-        const delta = m - 15;
-        if (delta <= 4) return `Un quart tocat de ${nomHora(properaHora)}`;
-        if (delta <= 6) return `Un quart ben tocat de ${nomHora(properaHora)}`;
-        if (delta <= 8) return `Mig quart de ${nomHora(properaHora)}`;
-        if (delta <= 11) return `Mig quart passat de ${nomHora(properaHora)}`;
-        return `Mig quart ben passat de ${nomHora(properaHora)}`;
-      }
-
-      // entre dos quarts i tres quarts
-      if (m > 30 && m < 45) {
-        const delta = m - 30;
-        if (delta <= 4) return `Dos quarts tocats de ${nomHora(properaHora)}`;
-        if (delta <= 6) return `Dos quarts ben tocats de ${nomHora(properaHora)}`;
-        if (delta <= 8) return `Dos quarts i mig de ${nomHora(properaHora)}`;
-        if (delta <= 11) return `Dos quarts i mig passats de ${nomHora(properaHora)}`;
-        return `Dos quarts i mig ben passat de ${nomHora(properaHora)}`;
-      }
-
-      // entre tres quarts i l’hora en punt següent
-      if (m > 45) {
-        const delta = m - 45;
-        if (delta <= 4) return `Tres quarts tocats de ${nomHora(properaHora)}`;
-        if (delta <= 6) return `Tres quarts ben tocats de ${nomHora(properaHora)}`;
-        if (delta <= 8) return `Tres quarts i mig de ${nomHora(properaHora)}`;
-        if (delta <= 11) return `Tres quarts i mig passats de ${nomHora(properaHora)}`;
-        return `Tres quarts i mig ben passat de ${nomHora(properaHora)}`;
-      }
-
-      // fallback (no hauria de passar)
-      return `${h}:${m < 10 ? "0" + m : m}`;
+    const properaHora = (h + 1) % 24;
+    const hores = [
+      "dotze", "una", "dues", "tres", "quatre", "cinc",
+      "sis", "set", "vuit", "nou", "deu", "onze"
+    ];
+    function nomHora(x) {
+      return hores[x % 12];
     }
 
-    // ---- actualitzar el rellotge en viu ----
-    function actualitzarHora() {
-      const ara = new Date();
-      const h = ara.getHours();
-      const m = ara.getMinutes();
-      const txt = horaCatala(h, m);
-      document.getElementById("hora").innerText = txt;
-    }
-    setInterval(actualitzarHora, 1000);
-    actualitzarHora();
+    // casos exactes
+    if (m === 0) return `Les ${nomHora(h)} en punt`;
+    if (m === 15) return `Un quart ${contraccioDe(nomHora(properaHora))}`;
+    if (m === 30) return `Dos quarts ${contraccioDe(nomHora(properaHora))}`;
+    if (m === 45) return `Tres quarts ${contraccioDe(nomHora(properaHora))}`;
 
-    // ---- utilitats per convertir entrada de l'usuari ----
-    function parseHoraInput(text) {
-      if (!text) return null;
-      text = text.trim();
-      // accepta formats: HH:MM, H:MM, HHMM, HMM
-      if (/^\d{1,2}:\d{2}$/.test(text)) {
-        const [hh, mm] = text.split(":").map(Number);
-        return {h: hh, m: mm};
-      }
-      if (/^\d{3,4}$/.test(text)) {
-        const n = text.length;
-        const hh = Number(text.slice(0, n - 2));
-        const mm = Number(text.slice(n - 2));
-        return {h: hh, m: mm};
-      }
-      return null;
+    // entre les hores i el primer quart
+    if (m > 0 && m < 15) {
+      if (m <= 4) return `Les ${nomHora(h)} tocades`;
+      if (m <= 6) return `Les ${nomHora(h)} ben tocades`;
+      if (m <= 8) return `Mig quart ${contraccioDe(nomHora(properaHora))}`;
+      if (m <= 11) return `Mig quart passat ${contraccioDe(nomHora(properaHora))}`;
+      return `Mig quart ben passat ${contraccioDe(nomHora(properaHora))}`;
     }
 
-    document.getElementById("btnConvertir").addEventListener("click", () => {
-      const raw = document.getElementById("entradaHora").value;
-      const parsed = parseHoraInput(raw);
-      const out = document.getElementById("resultat");
-      if (!parsed) {
-        out.innerText = "Format incorrecte — escriu HH:MM o HHMM (ex: 14:47 o 1447)";
-        return;
-      }
-      const {h, m} = parsed;
-      if (isNaN(h) || isNaN(m) || h < 0 || h > 23 || m < 0 || m > 59) {
-        out.innerText = "Hora invàlida";
-        return;
-      }
-      out.innerText = horaCatala(h, m);
-    });
+    // entre quart i dos quarts
+    if (m > 15 && m < 30) {
+      const delta = m - 15;
+      if (delta <= 4) return `Un quart tocat ${contraccioDe(nomHora(properaHora))}`;
+      if (delta <= 6) return `Un quart ben tocat ${contraccioDe(nomHora(properaHora))}`;
+      if (delta <= 8) return `Mig quart ${contraccioDe(nomHora(properaHora))}`;
+      if (delta <= 11) return `Mig quart passat ${contraccioDe(nomHora(properaHora))}`;
+      return `Mig quart ben passat ${contraccioDe(nomHora(properaHora))}`;
+    }
 
-    document.getElementById("btnClear").addEventListener("click", () => {
-      document.getElementById("entradaHora").value = "";
-      document.getElementById("resultat").innerText = "";
-      document.getElementById("entradaHora").focus();
-    });
+    // entre dos quarts i tres quarts
+    if (m > 30 && m < 45) {
+      const delta = m - 30;
+      if (delta <= 4) return `Dos quarts tocats ${contraccioDe(nomHora(properaHora))}`;
+      if (delta <= 6) return `Dos quarts ben tocats ${contraccioDe(nomHora(properaHora))}`;
+      if (delta <= 8) return `Dos quarts i mig ${contraccioDe(nomHora(properaHora))}`;
+      if (delta <= 11) return `Dos quarts i mig passats ${contraccioDe(nomHora(properaHora))}`;
+      return `Dos quarts i mig ben passat ${contraccioDe(nomHora(properaHora))}`;
+    }
 
-    // suport per fer Enter dins l'input
-    document.getElementById("entradaHora").addEventListener("keydown", (e) => {
-      if (e.key === "Enter") {
-        document.getElementById("btnConvertir").click();
-      }
-    });
-  </script>
+    // entre tres quarts i l’hora en punt següent
+    if (m > 45) {
+      const delta = m - 45;
+      if (delta <= 4) return `Tres quarts tocats ${contraccioDe(nomHora(properaHora))}`;
+      if (delta <= 6) return `Tres quarts ben tocats ${contraccioDe(nomHora(properaHora))}`;
+      if (delta <= 8) return `Tres quarts i mig ${contraccioDe(nomHora(properaHora))}`;
+      if (delta <= 11) return `Tres quarts i mig passats ${contraccioDe(nomHora(properaHora))}`;
+      return `Tres quarts i mig ben passat ${contraccioDe(nomHora(properaHora))}`;
+    }
+
+    // fallback
+    return `${h}:${m < 10 ? "0" + m : m}`;
+  }
+
+  // ---- actualitzar rellotge en viu ----
+  function actualitzarHora() {
+    const ara = new Date();
+    document.getElementById("hora").innerText = horaCatala(ara.getHours(), ara.getMinutes());
+  }
+  setInterval(actualitzarHora, 1000);
+  actualitzarHora();
+
+  // ---- convertir entrada manual ----
+  function parseHoraInput(text) {
+    if (!text) return null;
+    text = text.trim();
+    if (/^\d{1,2}:\d{2}$/.test(text)) {
+      const [hh, mm] = text.split(":").map(Number);
+      return {h: hh, m: mm};
+    }
+    if (/^\d{3,4}$/.test(text)) {
+      const n = text.length;
+      const hh = Number(text.slice(0, n - 2));
+      const mm = Number(text.slice(n - 2));
+      return {h: hh, m: mm};
+    }
+    return null;
+  }
+
+  document.getElementById("btnConvertir").addEventListener("click", () => {
+    const raw = document.getElementById("entradaHora").value;
+    const parsed = parseHoraInput(raw);
+    const out = document.getElementById("resultat");
+    if (!parsed) {
+      out.innerText = "Format incorrecte — escriu HH:MM o HHMM (ex: 14:47 o 1447)";
+      return;
+    }
+    const {h, m} = parsed;
+    if (isNaN(h) || isNaN(m) || h < 0 || h > 23 || m < 0 || m > 59) {
+      out.innerText = "Hora invàlida";
+      return;
+    }
+    out.innerText = horaCatala(h, m);
+  });
+
+  document.getElementById("btnClear").addEventListener("click", () => {
+    document.getElementById("entradaHora").value = "";
+    document.getElementById("resultat").innerText = "";
+    document.getElementById("entradaHora").focus();
+  });
+
+  document.getElementById("entradaHora").addEventListener("keydown", (e) => {
+    if (e.key === "Enter") document.getElementById("btnConvertir").click();
+  });
+</script>
 </body>
 </html>
