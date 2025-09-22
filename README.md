@@ -9,7 +9,7 @@ Aquest projecte conté una versió en **HTML** del document original en PDF, pen
 Quan activis GitHub Pages, la web estarà disponible aquí:
 
 ```
-https://el-teu-usuari.github.io/lhora/
+willyop12.github.io/hora/
 ```
 
 (Substitueix `el-teu-usuari` pel teu nom d'usuari de GitHub.)
